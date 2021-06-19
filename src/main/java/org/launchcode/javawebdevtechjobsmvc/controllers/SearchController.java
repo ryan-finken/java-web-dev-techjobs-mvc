@@ -33,6 +33,8 @@ public class SearchController {
         }
         model.addAttribute("columns", columnChoices);
         model.addAttribute("jobs", jobs);
+        // this attribute allows the controller to pass in the previous selection
+        model.addAttribute("previousSearchType", searchType);
 
         return "search";
     }

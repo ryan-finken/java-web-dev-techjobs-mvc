@@ -10,7 +10,16 @@
 
     <h1 th:text="${#strings.capitalizeWords(title)}"></h1>
 
-    <form th:action="@{/search/results}" method = "post">
+    <!--    This is my crummy-looking solution to the first bonus mission.
+            Basically, the th:unless form will display only if there
+            is no jobs object in the model (meaning the template is
+            being rendered at /search). If a jobs object *is* in the
+            model (being rendered at /search/results), the second form
+            (th:if) is used, which displays the user's previous searchType.
+            I also had to add another attribute to the /results controller's
+            model. This seems like the *wrong* way to solve this problem.
+    -->
+    <form th:unless="${jobs}" th:action="@{/search/results}" method = "post">
         <h2>Search by:</h2>
 
         <p>
@@ -21,6 +30,30 @@
                         th:id="${column.key}"
                         th:value="${column.key}"
                         th:checked="${column.key == 'all'}"/>
+                <label th:for="${column.key}" th:text="${column.value}"></label>
+            </span>
+
+        </p>
+
+        <p>
+            <label for="searchTerm">Keyword:</label>
+            <input type="text" name="searchTerm" id="searchTerm" />
+        </p>
+
+        <input type="submit" value="Search" />
+    </form>
+
+    <form th:if="${jobs}" th:action="@{/search/results}" method = "post">
+        <h2>Search by:</h2>
+
+        <p>
+            <span th:each="column : ${columns}">
+                <input
+                        type="radio"
+                        name="searchType"
+                        th:id="${column.key}"
+                        th:value="${column.key}"
+                        th:checked="${column.key == previousSearchType}"/>
                 <label th:for="${column.key}" th:text="${column.value}"></label>
             </span>
 
